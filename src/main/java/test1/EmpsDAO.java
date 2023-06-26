@@ -1,14 +1,10 @@
-package chap10;
+package test1;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NewsDAO {
+public class EmpsDAO {
 	final String JDBC_DRIVER = "oracle.jdbc.driver.OracleDriver";
 	final String JDBC_URL =  "jdbc:oracle:thin:@localhost:1521:XE";
 	
@@ -24,9 +20,9 @@ public class NewsDAO {
 		return conn;
 	}
 	
-	public List<News> getAll() throws Exception {
+	public List<Emps> getAll() throws Exception {
 		Connection conn = open();
-		List<News> newsList = new ArrayList<>();
+		List<Emps> empsList = new ArrayList<>();
 		
 //		String sql = "select aid, title, PARSEDATETIME(date,'yyyy-MM-dd hh:mm:ss') as cdate from news";
 		String sql = "select aid, title, ndate as cdate from news";
@@ -35,22 +31,22 @@ public class NewsDAO {
 		
 		try(conn; pstmt; rs) {
 			while(rs.next()) {
-				News n = new News();
+				Emps n = new Emps();
 				n.setAid(rs.getInt("aid"));
 				n.setTitle(rs.getString("title"));
 				n.setDate(rs.getString("cdate")); 
 				
-				newsList.add(n);
+				empsList.add(n);
 			}
-			return newsList;			
+			return empsList;
 		}
 
 	}
 	
-	public News getNews(int aid) throws SQLException {
+	public Emps getEmps(int aid) throws SQLException {
 		Connection conn = open();
 
-		News n = new News();
+		Emps n = new Emps();
 //		String sql = "select aid, title, img, PARSEDATETIME(date,'yyyy-MM-dd hh:mm:ss') as cdate, content from news where aid=?";
 		String sql = "select aid, title, img, ndate as cdate, content from news where aid=?";
 
@@ -71,7 +67,7 @@ public class NewsDAO {
 		}
 	}
 	
-	public void addNews(News n) throws Exception {
+	public void addEmps(Emps n) throws Exception {
 		Connection conn = open();
 		
 //		String sql = "insert into news(title,img,date,content) values(?,?,CURRENT_TIMESTAMP(),?)";
@@ -92,7 +88,7 @@ public class NewsDAO {
 	}
 	}
 	
-	public void delNews(int aid) throws SQLException {
+	public void delEmps(int aid) throws SQLException {
 		Connection conn = open();
 		
 		String sql = "delete from news where aid=?";

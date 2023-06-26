@@ -1,10 +1,6 @@
-package chap10;
+package test1;
 
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.StringTokenizer;
+import org.apache.commons.beanutils.BeanUtils;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
@@ -16,26 +12,25 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.sql.SQLException;
+import java.util.List;
 
-import org.apache.commons.beanutils.BeanUtils;
-
-import chap10.News;
-import chap10.NewsDAO;
-
-@WebServlet("/news.nhn")
+@WebServlet("/emps.nhn")
 @MultipartConfig(maxFileSize=1024*1024*2, location="C:/Users/badac/Works/Project/oracle_db_project_2023/JSP_PROJECT_practice/web/tmp")
-public class NewsController extends HttpServlet {
+public class EmpsController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-	private NewsDAO dao;
+	private EmpsDAO dao;
 	private ServletContext ctx;
 	
 	// 웹 리소스 기본 경로 지정
-	private final String START_PAGE = "chap10/newsList.jsp";
+	private final String START_PAGE = "test1/newsList.jsp";
 	
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
-		dao = new NewsDAO();
+		dao = new EmpsDAO();
 		ctx = getServletContext();		
 	}
 
@@ -43,7 +38,7 @@ public class NewsController extends HttpServlet {
 		request.setCharacterEncoding("utf-8");
 		String action = request.getParameter("action");
 		
-		dao = new NewsDAO();
+		dao = new EmpsDAO();
 		
 		// 자바 리플렉션을 사용해 if, switch 없이 요청에 따라 구현 메서드가 실행되도록 함.
 		Method m;
@@ -51,7 +46,7 @@ public class NewsController extends HttpServlet {
 		
 		// action 파라미터 없이 접근한 경우
 		if (action == null) {
-			action = "listNews";
+			action = "listEmps";
 		}
 		
 		try {
@@ -85,7 +80,7 @@ public class NewsController extends HttpServlet {
 	}
     
     public String addNews(HttpServletRequest request) {
-		News n = new News();
+		Emps n = new Emps();
 		try {						
 			// 이미지 파일 저장
 	        Part part = request.getPart("file");
@@ -99,33 +94,33 @@ public class NewsController extends HttpServlet {
 	        // 이미지 파일 이름을 News 객체에도 저장
 	        n.setImg("/tmp/"+fileName);
 
-			dao.addNews(n);
+			dao.addEmps(n);
 		} catch (Exception e) {
 			e.printStackTrace();
 			ctx.log("뉴스 추가 과정에서 문제 발생!!");
 			request.setAttribute("error", "뉴스가 정상적으로 등록되지 않았습니다!!");
-			return listNews(request);
+			return listEmps(request);
 		}
 		
-		return "redirect:/news.nhn?action=listNews";
+		return "redirect:/emps.nhn?action=listEmps";
 		
 	}
 
-	public String deleteNews(HttpServletRequest request) {
+	public String deleteEmps(HttpServletRequest request) {
     	int aid = Integer.parseInt(request.getParameter("aid"));
 		try {
-			dao.delNews(aid);
+			dao.delEmps(aid);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			ctx.log("뉴스 삭제 과정에서 문제 발생!!");
 			request.setAttribute("error", "뉴스가 정상적으로 삭제되지 않았습니다!!");
-			return listNews(request);
+			return listEmps(request);
 		}
-		return "redirect:/news.nhn?action=listNews";
+		return "redirect:/emps.nhn?action=listEmps";
 	}
 
-	public String listNews(HttpServletRequest request) {
-    	List<News> list;
+	public String listEmps(HttpServletRequest request) {
+    	List<Emps> list;
 		try {
 			list = dao.getAll();
 	    	request.setAttribute("newslist", list);
@@ -134,13 +129,13 @@ public class NewsController extends HttpServlet {
 			ctx.log("뉴스 목록 생성 과정에서 문제 발생!!");
 			request.setAttribute("error", "뉴스 목록이 정상적으로 처리되지 않았습니다!!");
 		}
-    	return "chap10/newsList.jsp";
+    	return "test1/newsList.jsp";
     }
     
-    public String getNews(HttpServletRequest request) {
+    public String getEmps(HttpServletRequest request) {
         int aid = Integer.parseInt(request.getParameter("aid"));
         try {
-			News n = dao.getNews(aid);
+			Emps n = dao.getEmps(aid);
 			request.setAttribute("news", n);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -148,7 +143,7 @@ public class NewsController extends HttpServlet {
 			request.setAttribute("error", "뉴스를 정상적으로 가져오지 못했습니다!!");
 		}
 
-    	return "chap10/newsView.jsp";
+    	return "test1/newsView.jsp";
     }
         
     // multipart 헤더에서 파일이름 추출
