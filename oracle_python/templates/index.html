@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>FastAPI HTML Example</title>
+        <link
+            href="{{ url_for('static', path='/styles.css') }}"
+            rel="stylesheet"
+        />
+    </head>
+    <body>
+        <h1>Hello, {{ name }}!</h1>
+        <span></span>
+    </body>
+    <script>
+        fetch("/employees")
+            .then((response) => response.json())
+            .then((msg) => (document.querySelector("span").innerText = msg));
+    </script>
+</html>

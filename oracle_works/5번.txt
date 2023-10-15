@@ -1,0 +1,159 @@
+
+
+1. 3개 테이블에서 사용할 시퀀스, 존재 유무 관계 없이 DROP
+
+DROP SEQUENCE shares_seq;
+
+DROP SEQUENCE stock_seq;
+
+DROP SEQUENCE customer_seq;
+
+
+
+
+
+2. 위 3개 테이블에서 사용할 시퀀스 3개 create
+
+CREATE SEQUENCE customer_seq 
+
+INCREMENT BY 1
+
+START WITH 1
+
+MINVALUE 1
+
+MAXVALUE 10;
+
+
+
+CREATE SEQUENCE stock_seq
+
+START WITH 1
+
+INCREMENT BY 1
+
+NO MINVALUE
+
+NO MAXVALUE
+
+CACHE 1;
+
+
+
+CREATE SEQUENCE shares_seq 
+
+INCREMENT BY 1
+
+START WITH 1
+
+MINVALUE 1
+
+MAXVALUE 5;
+
+
+
+3. 3개 테이블에 대해, 존재 유무 관계 없이 테이블 DROP
+
+DROP TABLE shares;
+
+DROP TABLE customer;
+
+DROP TABLE stock;
+
+
+
+
+
+4. 위 3개 테이블 create(PK, FK 준수)
+
+CREATE TABLE Customer (
+
+    ssn CHAR(15) PRIMARY KEY,
+
+    cust_name CHAR(40),
+
+    address CHAR(100),
+
+    cash_balance REAL,
+
+    credit_avail REAL
+
+);
+
+
+
+
+
+CREATE TABLE Shares (
+
+    ssn CHAR(15),
+
+    symbol CHAR(8),
+
+    quantity INT,
+
+    purchase_price REAL
+
+);
+
+
+
+
+
+CREATE TABLE Stock (
+
+    symbol CHAR(8) PRIMARY KEY,
+
+    price REAL
+
+);
+
+
+
+5. 각 테이블에 INSERT(SEQ사용 INSERT, 수정가능)
+
+
+
+INSERT INTO Shares (SSN, CUST_NAME, ADDRESS, CASH_BALANCE, CREDIT_AVAIL)
+
+VALUES (NEXTVAL('shares_seq'), 'John Meyers', '1444 California Lane, Walawala, WA.', 0, 5000),
+
+       (NEXTVAL('shares_seq'), 'Tim Uhlmann', '45 West Road, Fremont CA', 0, 5000),
+
+       (NEXTVAL('shares_seq'), 'Jane O`Brien', '36 High Plan Rd, Belmont, MA', 0, 5000),
+
+       (NEXTVAL('shares_seq'), 'Patricia Duffy', '90 Main Street, Catamount, VA', 0, 5000),
+
+       (NEXTVAL('shares_seq'), 'Pamela Sonders', '', 0, 5000),
+
+       (NEXTVAL('shares_seq'), 'Jennifer Sullivan Volpe', '', 0, 5000),
+
+       (NEXTVAL('shares_seq'), 'Priscilla Malcolm', '', 0, 5000),
+
+       (NEXTVAL('shares_seq'), 'Georgianna DG Meagher', '', 0, 5000),
+
+       (NEXTVAL('shares_seq'), 'Tom McGinn', '', 0, 5000),
+
+       (NEXTVAL('shares_seq'), 'Brian Waltrous', '', 0, 5000);
+
+
+
+6. public void addCustomer (String name, String ssn, String addr) 
+
+INSERT INTO Shares (SSN, CUST_NAME, ADDRESS, CASH_BALANCE, CREDIT_AVAIL) 
+VALUES (NEXTVAL('shares_seq'), 'John Meyers', '1444 California Lane, Walawala, WA.', 0, 5000);
+
+
+
+7. public void deleteCustomer(String ssn) 
+
+DELETE FROM Shares WHERE CUST_NAME = 'Tim Uhlmann';
+
+
+
+8. public void updateCustomer(String name, String ssn, String addr) 
+
+UPDATE Shares SET CASH_BALANCE = 1000 WHERE SSN = 1;
+
+
+

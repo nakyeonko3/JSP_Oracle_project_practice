@@ -1,0 +1,52 @@
+import paho.mqtt.client as mqtt
+import cx_Oracle
+from datetime import datetime
+import re
+
+# DB 접속
+con = cx_Oracle.connect("scott", "TIGER", "localhost:1521/xe", encoding="UTF-8")
+cursor = con.cursor()
+
+TOPIC3 = "th_743203"
+HOSTNAME = "broker.hivemq.com"
+
+
+def on_connect(client, userdata, flags, rc):
+    if rc == 0:
+        print("connected OK")
+    else:
+        print("Bad connection Returned code=", rc)
+
+
+def on_disconnect(client, userdata, flags, rc=0):
+    print(str(rc))
+
+
+def on_subscribe(client, userdata, mid, granted_qos):
+    print("subscribed: " + str(mid) + " " + str(granted_qos))
+
+
+def on_message(client, userdata, msg):
+    now = datetime.now()
+    current_time = now.strftime("%H:%M:%S")
+
+    data = str(msg.payload.decode("utf-8"))
+    re_data = re.findall(r"\d+", data)
+    num1, num2 = re_data
+
+    cursor.execute(
+        f"INSERT INTO sensor_data(datetime , temperature, humidity) VALUES ('{current_time}', {num1}, {num2})"
+    )
+    con.commit()
+    print(f"{current_time}, {num1}, {num2}")
+
+
+client = mqtt.Client()
+client.on_connect = on_connect
+client.on_disconnect = on_disconnect
+client.on_subscribe = on_subscribe
+client.on_message = on_message
+
+client.connect(HOSTNAME, 1883)
+client.subscribe(TOPIC3, 1)
+client.loop_forever()
