@@ -5,40 +5,58 @@ package chap10;
  *
  */
 public class News {
-	private int aid;
-	private String title;
-	private String img;
-	private String date;
-	private String content;
-	
-	public int getAid() {
-		return aid;
+	private int SongID;
+	private String SongName;
+	private String ArtistName;
+	private String SongURL;
+	private String PlaylistName;
+	private String UpdatedDate;
+
+	public int getSongID() {
+		return SongID;
 	}
-	public void setAid(int aid) {
-		this.aid = aid;
+
+	public void setSongID(int songID) {
+		SongID = songID;
 	}
-	public String getTitle() {
-		return title;
+
+	public String getSongName() {
+		return SongName;
 	}
-	public void setTitle(String title) {
-		this.title = title;
+
+	public void setSongName(String songName) {
+		SongName = songName;
 	}
-	public String getImg() {
-		return img;
+
+	public String getArtistName() {
+		return ArtistName;
 	}
-	public void setImg(String img) {
-		this.img = img;
+
+	public void setArtistName(String artistName) {
+		ArtistName = artistName;
 	}
-	public String getDate() {
-		return date;
+
+	public String getSongURL() {
+		return SongURL;
 	}
-	public void setDate(String date) {
-		this.date = date;
+
+	public void setSongURL(String songURL) {
+		SongURL = songURL;
 	}
-	public String getContent() {
-		return content;
+
+	public String getPlaylistName() {
+		return PlaylistName;
 	}
-	public void setContent(String content) {
-		this.content = content;
+
+	public void setPlaylistName(String playlistName) {
+		PlaylistName = playlistName;
+	}
+
+	public String getUpdatedDate() {
+		return UpdatedDate;
+	}
+
+	public void setUpdatedDate(String updatedDate) {
+		UpdatedDate = updatedDate;
 	}
 }

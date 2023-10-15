@@ -29,80 +29,85 @@ public class NewsDAO {
 		List<News> newsList = new ArrayList<>();
 		
 //		String sql = "select aid, title, PARSEDATETIME(date,'yyyy-MM-dd hh:mm:ss') as cdate from news";
-		String sql = "select aid, title, ndate as cdate from news";
+		String sql = "SELECT * FROM SONGTABLE";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		ResultSet rs = pstmt.executeQuery();
 		
 		try(conn; pstmt; rs) {
 			while(rs.next()) {
 				News n = new News();
-				n.setAid(rs.getInt("aid"));
-				n.setTitle(rs.getString("title"));
-				n.setDate(rs.getString("cdate")); 
-				
+				n.setSongID(rs.getInt("SongID"));
+				n.setSongName(rs.getString("SongName"));
+				n.setArtistName(rs.getString("ArtistName"));
+				n.setSongURL(rs.getString("SongURL"));
+				n.setPlaylistName(rs.getString("PlaylistName"));
+				n.setUpdatedDate(rs.getString("UpdatedDate"));
+				System.out.println(newsList);
+
 				newsList.add(n);
 			}
 			return newsList;			
 		}
+
 	}
 	
-	public News getNews(int aid) throws SQLException {
-		Connection conn = open();
-
-		News n = new News();
-//		String sql = "select aid, title, img, PARSEDATETIME(date,'yyyy-MM-dd hh:mm:ss') as cdate, content from news where aid=?";
-		String sql = "select aid, title, img, ndate as cdate, content from news where aid=?";
-
-		PreparedStatement pstmt = conn.prepareStatement(sql);
-		pstmt.setInt(1, aid);
-		ResultSet rs = pstmt.executeQuery();
-		
-		rs.next();
-		
-		try(conn; pstmt; rs) {
-			n.setAid(rs.getInt("aid"));
-			n.setTitle(rs.getString("title"));
-			n.setImg(rs.getString("img"));
-			n.setDate(rs.getString("cdate"));
-			n.setContent(rs.getString("content"));
-			pstmt.executeQuery();
-			return n;
-		}
-	}
+//	public News getNews(int aid) throws SQLException {
+//		Connection conn = open();
+//
+//		News n = new News();
+////		String sql = "select aid, title, img, PARSEDATETIME(date,'yyyy-MM-dd hh:mm:ss') as cdate, content from news where aid=?";
+//		String sql = "select aid, title, img, ndate as cdate, content from news where aid=?";
+//
+//		PreparedStatement pstmt = conn.prepareStatement(sql);
+//		pstmt.setInt(1, aid);
+//		ResultSet rs = pstmt.executeQuery();
+//
+//		rs.next();
+//
+//		try(conn; pstmt; rs) {
+//			n.setAid(rs.getInt("aid"));
+//			n.setTitle(rs.getString("title"));
+//			n.setImg(rs.getString("img"));
+//			n.setDate(rs.getString("cdate"));
+//			n.setContent(rs.getString("content"));
+//			pstmt.executeQuery();
+//			return n;
+//		}
+//	}
 	
-	public void addNews(News n) throws Exception {
-		Connection conn = open();
-		
-//		String sql = "insert into news(title,img,date,content) values(?,?,CURRENT_TIMESTAMP(),?)";
-//		INSERT INTO news(aid , title, img, ndate, content) VALUES (aid_seq.NEXTVAL, 'aa', 'bb', CURRENT_TIMESTAMP, 'sdsd');
-
-		String sql = "INSERT INTO news(aid , title, img, ndate, content) VALUES (aid_seq.NEXTVAL, ?, ?, CURRENT_TIMESTAMP, ?)";
-//		String sql = "INSERT INTO news(aid , title, img, ndate, content) VALUES (aid_seq.NEXTVAL, 'aa', 'bb', CURRENT_TIMESTAMP, 'sdsd');";
-		PreparedStatement pstmt;
-		
-		try {
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, n.getTitle());
-			pstmt.setString(2, n.getImg());
-			pstmt.setString(3, n.getContent());
-			pstmt.executeUpdate();
-	} catch(Exception e) {
-		e.printStackTrace();
-	}
-	}
-	
-	public void delNews(int aid) throws SQLException {
-		Connection conn = open();
-		
-		String sql = "delete from news where aid=?";
-		PreparedStatement pstmt = conn.prepareStatement(sql);
-		
-		try(conn; pstmt) {
-			pstmt.setInt(1, aid);
-			// 삭제된 뉴스 기사가 없을 경우
-			if(pstmt.executeUpdate() == 0) {
-				throw new SQLException("DB에러");
-			}
-		}
-	}
+//	public void addNews(News n) throws Exception {
+//		Connection conn = open();
+//
+////		String sql = "insert into news(title,img,date,content) values(?,?,CURRENT_TIMESTAMP(),?)";
+////		INSERT INTO news(aid , title, img, ndate, content) VALUES (aid_seq.NEXTVAL, 'aa', 'bb', CURRENT_TIMESTAMP, 'sdsd');
+//
+//		String sql = "INSERT INTO news(aid , title, img, ndate, content) VALUES (aid_seq.NEXTVAL, ?, ?, CURRENT_TIMESTAMP, ?)";
+////		String sql = "INSERT INTO news(aid , title, img, ndate, content) VALUES (aid_seq.NEXTVAL, 'aa', 'bb', CURRENT_TIMESTAMP, 'sdsd');";
+//		PreparedStatement pstmt;
+//
+//		try {
+//			pstmt = conn.prepareStatement(sql);
+//			pstmt.setString(1, n.getTitle());
+//			pstmt.setString(2, n.getImg());
+//			pstmt.setString(3, n.getContent());
+//			pstmt.executeUpdate();
+//	} catch(Exception e) {
+//		e.printStackTrace();
+//	}
+//	}
+//
+//	public void delNews(int aid) throws SQLException {
+//		Connection conn = open();
+//
+//		String sql = "delete from news where aid=?";
+//		PreparedStatement pstmt = conn.prepareStatement(sql);
+//
+//		try(conn; pstmt) {
+//			pstmt.setInt(1, aid);
+//			// 삭제된 뉴스 기사가 없을 경우
+//			if(pstmt.executeUpdate() == 0) {
+//				throw new SQLException("DB에러");
+//			}
+//		}
+//	}
 }

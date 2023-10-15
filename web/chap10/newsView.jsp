@@ -23,13 +23,6 @@
     </div>
     <hr>
     <a href="javascript:history.back()" class="btn btn-primary"><< Back</a>
-    
     </div>
     </body>
-<%--<script>--%>
-<%--    const dsds = document.querySelector("img");--%>
-<%--    // src 속성에 파일 주소 지정--%>
-<%--    dsds.src = "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Ftz8fu%2FbtrH0wJCr0w%2F01cMLkfZ5e8cZ1uW3kkBDk%2Fimg.png"--%>
-<%--    // 요소에 삽입--%>
-<%--</script>--%>
 </html>

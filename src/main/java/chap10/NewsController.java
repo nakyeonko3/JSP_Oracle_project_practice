@@ -57,7 +57,6 @@ public class NewsController extends HttpServlet {
 		try {
 			// 현재 클래스에서 action 이름과 HttpServletRequest 를 파라미터로 하는 메서드 찾음
 			m = this.getClass().getMethod(action, HttpServletRequest.class);
-			
 			// 메서드 실행후 리턴값 받아옴
 			view = (String)m.invoke(this, request);
 		} catch (NoSuchMethodException e) {
@@ -82,45 +81,45 @@ public class NewsController extends HttpServlet {
 		}
 	}
     
-    public String addNews(HttpServletRequest request) {
-		News n = new News();
-		try {						
-			// 이미지 파일 저장
-	        Part part = request.getPart("file");
-	        String fileName = getFilename(part);
-	        if(fileName != null && !fileName.isEmpty()){
-	            part.write(fileName);
-	        }	        
-	        // 입력값을 News 객체로 매핑
-			BeanUtils.populate(n, request.getParameterMap());
-			
-	        // 이미지 파일 이름을 News 객체에도 저장
-	        n.setImg("/tmp/"+fileName);
+//    public String addNews(HttpServletRequest request) {
+//		News n = new News();
+//		try {
+//			// 이미지 파일 저장
+//	        Part part = request.getPart("file");
+//	        String fileName = getFilename(part);
+//	        if(fileName != null && !fileName.isEmpty()){
+//	            part.write(fileName);
+//	        }
+//	        // 입력값을 News 객체로 매핑
+//			BeanUtils.populate(n, request.getParameterMap());
+//
+//	        // 이미지 파일 이름을 News 객체에도 저장
+//	        n.setImg("/tmp/"+fileName);
+//
+//			dao.addNews(n);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			ctx.log("뉴스 추가 과정에서 문제 발생!!");
+//			request.setAttribute("error", "뉴스가 정상적으로 등록되지 않았습니다!!");
+//			return listNews(request);
+//		}
+//
+//		return "redirect:/news.nhn?action=listNews";
+//
+//	}
 
-			dao.addNews(n);
-		} catch (Exception e) {
-			e.printStackTrace();
-			ctx.log("뉴스 추가 과정에서 문제 발생!!");
-			request.setAttribute("error", "뉴스가 정상적으로 등록되지 않았습니다!!");
-			return listNews(request);
-		}
-		
-		return "redirect:/news.nhn?action=listNews";
-		
-	}
-
-	public String deleteNews(HttpServletRequest request) {
-    	int aid = Integer.parseInt(request.getParameter("aid"));
-		try {
-			dao.delNews(aid);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			ctx.log("뉴스 삭제 과정에서 문제 발생!!");
-			request.setAttribute("error", "뉴스가 정상적으로 삭제되지 않았습니다!!");
-			return listNews(request);
-		}
-		return "redirect:/news.nhn?action=listNews";
-	}
+//	public String deleteNews(HttpServletRequest request) {
+//    	int aid = Integer.parseInt(request.getParameter("aid"));
+//		try {
+//			dao.delNews(aid);
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//			ctx.log("뉴스 삭제 과정에서 문제 발생!!");
+//			request.setAttribute("error", "뉴스가 정상적으로 삭제되지 않았습니다!!");
+//			return listNews(request);
+//		}
+//		return "redirect:/news.nhn?action=listNews";
+//	}
 
 	public String listNews(HttpServletRequest request) {
     	List<News> list;
@@ -135,32 +134,32 @@ public class NewsController extends HttpServlet {
     	return "chap10/newsList.jsp";
     }
     
-    public String getNews(HttpServletRequest request) {
-        int aid = Integer.parseInt(request.getParameter("aid"));
-        try {
-			News n = dao.getNews(aid);
-			request.setAttribute("news", n);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			ctx.log("뉴스를 가져오는 과정에서 문제 발생!!");
-			request.setAttribute("error", "뉴스를 정상적으로 가져오지 못했습니다!!");
-		}
-
-    	return "chap10/newsView.jsp";
-    }
+//    public String getNews(HttpServletRequest request) {
+//        int aid = Integer.parseInt(request.getParameter("aid"));
+//        try {
+//			News n = dao.getNews(aid);
+//			request.setAttribute("news", n);
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//			ctx.log("뉴스를 가져오는 과정에서 문제 발생!!");
+//			request.setAttribute("error", "뉴스를 정상적으로 가져오지 못했습니다!!");
+//		}
+//
+//    	return "chap10/newsView.jsp";
+//    }
         
     // multipart 헤더에서 파일이름 추출
-	private String getFilename(Part part) {
-        String fileName = null;   
-        // 파일이름이 들어있는 헤더 영역을 가지고 옴
-        String header = part.getHeader("content-disposition");
-        //part.getHeader -> form-data; name="img"; filename="사진5.jpg"
-        System.out.println("Header => "+header);
-
-        // 파일 이름이 들어있는 속성 부분의 시작위치를 가져와 쌍따옴표 사이의 값 부분만 가지고옴
-        int start = header.indexOf("filename=");
-        fileName = header.substring(start+10,header.length()-1);        
-        ctx.log("파일명:"+fileName);        
-        return fileName; 
-	}
+//	private String getFilename(Part part) {
+//        String fileName = null;
+//        // 파일이름이 들어있는 헤더 영역을 가지고 옴
+//        String header = part.getHeader("content-disposition");
+//        //part.getHeader -> form-data; name="img"; filename="사진5.jpg"
+//        System.out.println("Header => "+header);
+//
+//        // 파일 이름이 들어있는 속성 부분의 시작위치를 가져와 쌍따옴표 사이의 값 부분만 가지고옴
+//        int start = header.indexOf("filename=");
+//        fileName = header.substring(start+10,header.length()-1);
+//        ctx.log("파일명:"+fileName);
+//        return fileName;
+//	}
 }
